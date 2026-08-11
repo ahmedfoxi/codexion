@@ -1,0 +1,66 @@
+# include "codex.h"
+
+
+void coders_init(t_data *data)//possible add pointer function and arg for pthread_create().
+{
+    int i;
+
+
+    i = 0;
+    // free
+    data->coders = malloc(sizeof(t_coder) * data->number_of_coders);
+    if (!data->coders)
+        return ;
+
+    while (i < data->number_of_coders)
+    {
+        data->coders[i].id = i + 1;
+        data->coders[i].last_compile = 0;
+        data->coders[i].compile_count = 0;
+        data->coders[i].running = 0;
+        i++;
+    }
+}
+
+void dongle_init(t_data *data)
+{
+    int i;
+    int n_coders;
+
+
+    i = 0;
+    n_coders = data->number_of_coders;
+    // free
+    data->dongles = malloc(sizeof(t_dongle) * n_coders);
+    if (!data->dongles)
+        return ;
+    
+    while (i < n_coders)
+    {
+        data->dongles[i].id = i + 1;
+        data->dongles[i].available = 1;
+        data->dongles[i].available_at = 0;
+        
+        pthread_mutex_init(&data->dongles[i].mutex, NULL);
+        pthread_cond_init(&data->dongles[i].cond, NULL);
+        i++;
+    }
+}
+
+// this fun need more work
+void link_coder_dongle(t_data *data)
+{
+    int i;
+    int n_coders;
+
+
+    n_coders = data->number_of_coders;
+    i = 0;
+    while(i < n_coders)
+    {
+        data->coders[i].left = &data->dongles[i];
+        if (i + 1 < n_coders)
+            data->coders[i].right = &data->dongles[i + 1];
+        i++;
+    }
+}
