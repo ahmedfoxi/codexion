@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 13:00:19 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/11 08:53:52 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/13 14:30:18 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int is_digits(char *str)
 {
     int i;
 
+
     i = 0;
     while (str[i])
     {
@@ -24,7 +25,6 @@ int is_digits(char *str)
             return (0);
         i++;
     }
-
     return (1);
 }
 
@@ -33,9 +33,9 @@ long ft_atoi(char *str)
     int i;
     long result;
 
+
     i = 0;
     result = 0;
-
     while (str[i])
     {
         result = result * 10 + (str[i] - '0');
@@ -79,6 +79,7 @@ t_data  *get_args(char **args)
     int     i;
     long     numbers[7];
 
+
     data = malloc(sizeof(t_data));
     if (!data)
         return (NULL);
@@ -97,6 +98,6 @@ t_data  *get_args(char **args)
     data->number_of_compiles_required = numbers[5];
     data->dongle_cooldown = numbers[6];
     data->scheduler = args[8];
-    
+
     return (data);
 }
