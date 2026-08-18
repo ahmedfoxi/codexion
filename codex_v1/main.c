@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/13 21:54:45 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/17 19:57:45 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void *monitor_routing(void *arg)
 {
     t_data *data;
 
-    
+
     data = (t_data *)arg;
     while (!data->stop)
     {

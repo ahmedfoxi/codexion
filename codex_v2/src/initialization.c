@@ -1,7 +1,7 @@
 # include "codex.h"
 
 
-void ft_coders_init(t_data *data)//possible add pointer function and arg for pthread_create().
+void coder_init(t_data *data)//possible add pointer function and arg for pthread_create().
 {
     int i;
 
@@ -21,7 +21,7 @@ void ft_coders_init(t_data *data)//possible add pointer function and arg for pth
     }
 }
 
-void ft_dongle_init(t_data *data)
+void dongle_init(t_data *data)
 {
     int i;
     int n_coders;
@@ -29,50 +29,34 @@ void ft_dongle_init(t_data *data)
 
     i = 0;
     n_coders = data->number_of_coders;
-    // free
     data->dongles = malloc(sizeof(t_dongle) * n_coders);
     if (!data->dongles)
         return ;
-
     while (i < n_coders)
     {
         data->dongles[i].id = i + 1;
         data->dongles[i].available = 1;
         data->dongles[i].available_at = 0;
 
+        data->dongles[i].queue.capacity = 0;
+        data->dongles[i].queue.size = 2;
+        data->dongles[i].queue.requests = malloc(sizeof(t_request) * 2);
+        if (!data->dongles[i].queue.requests)
+            return ;
         pthread_mutex_init(&data->dongles[i].mutex, NULL);
         pthread_cond_init(&data->dongles[i].cond, NULL);
         i++;
     }
 }
 
-void *coder_routing(void *arg)
+void affiche(t_data *data)
 {
-    t_coder *coder;
-
-    coder = (t_data *)arg;
-    printf("%d %d has taken a dongle", coder->compile_count, coder->id);
-
-    return NULL;
-}
-
-void create_threads(t_data *data)
-{
-    int i;
+    int     i=0;
 
 
-    i = 0;
     while (i < data->number_of_coders)
     {
-        pthread_create(
-            &data->coders[i].thread,
-            NULL,
-            coder_routing,
-            &data->coders[i]
-        );
+        printf("%d\n", data->dongles[i].queue.size);
         i++;
     }
-    i = 0;
-    while (i < data->number_of_coders)
-        pthread_join(data->coders[i++].thread, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 13:00:19 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/13 14:30:18 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/18 15:56:28 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ t_data  *get_args(char **args)
     data->time_to_refactor = numbers[4];
     data->number_of_compiles_required = numbers[5];
     data->dongle_cooldown = numbers[6];
-    data->scheduler = args[8];
+    if (strcmp(args[8], "fifo") == 0)
+        data->scheduler = 0;
+    if (strcmp(args[8], "edf") == 0)
+        data->scheduler = 1;
 
     return (data);
 }

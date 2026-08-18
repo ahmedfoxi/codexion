@@ -5,10 +5,9 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -pthread
 
 SRCS =  src/main.c \
-		src/heap_queue.c \
 		src/initialization.c \
 		src/parser.c \
-		src/time_calcule \
+		src/time_calule.c \
 
 OBJS = $(SRCS:.c=.o)
 

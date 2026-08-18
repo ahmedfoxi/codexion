@@ -4,8 +4,11 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g -pthread
 
-SRCS = main.c \
-			parser.c \
+SRCS =  main1.c \
+		heap_queue.c\
+		help.c\
+		monitor.c\
+		time_calule.c\
 
 OBJS = $(SRCS:.c=.o)
 

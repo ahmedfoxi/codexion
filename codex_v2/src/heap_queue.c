@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:15:10 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/17 21:24:44 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/18 16:20:34 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_request	heap_pop(t_heap *heap, int scheduler)
 	int			right;
 	int			smallest;
 
+
 	min_req = heap->requests[0];
 	heap->requests[0] = heap->requests[--heap->size];
 	i = 0;
@@ -104,10 +105,4 @@ t_request	heap_pop(t_heap *heap, int scheduler)
 			break ;
 	}
 	return (min_req);
-}
-
-
-int main()
-{
-    int table[6] = {2, 5, 3, 8, 7, 1};
 }

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/17 23:54:15 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/18 18:48:45 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 typedef struct s_request
 {
 	int		coder_id;
+	int 	dongle_left;
+	int 	dongle_right;
 	long	arrival_time;
 	long	deadline;
 }	t_request;
@@ -43,7 +45,7 @@ typedef struct s_dongle
 	pthread_cond_t	cond;
 	int				available;
 	long			available_at;
-	t_heap			queue;
+	t_heap			queue; // the queue must be pointer
 }	t_dongle;
 
 typedef struct s_coder
@@ -81,19 +83,21 @@ typedef struct s_data
 	int				stop;
 }	t_data;
 
+void affiche(t_data *data); //for test
 
-long ft_atoi(char *str);
-int is_digits(char *str);
-t_data    *ft_parse(char **args);
-t_data  *get_args(char **args);
+long	ft_atoi(char *str);
+int	is_digits(char *str);
+t_data	*ft_parse(char **args);
+t_data	*get_args(char **args);
 
-void ft_coders_init(t_data *data);
-void ft_dongle_init(t_data *data);
-void *coder_routing(void *arg);
-void create_threads(t_data *data);
+void	coder_init(t_data *data);
+void	dongle_init(t_data *data);
 
-long get_time_ms(void);
-void    precise_sleep(long ms, t_data *data);
+void	*coder_routing(void *arg);
+void	create_threads(t_data *data);
+
+long	get_time_ms(void);
+void	precise_sleep(long ms, t_data *data);
 
 // void    print_log(t_coder *coder, const char *action);
 // static void	wait_for_dongle(t_dongle *dongle, t_coder *coder);

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/17 23:54:02 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/18 17:53:12 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ int main(int ac, char **av)
         return 0;
     }
     data = ft_parse(av);
-    ft_coders_init(data);
-    ft_dongles_init(data);
+    dongle_init(data);
+    coder_init(data);
+    affiche(data);
+
 
     return (0);
 }
@@ -55,4 +57,35 @@ int main(int ac, char **av)
 //     pthread_create(&data->monitor, NULL, monitor_routing, data);
 //     pthread_join(data->monitor, NULL);
 
+// }
+
+// void *coder_routing(void *arg)
+// {
+//     t_coder *coder;
+
+//     coder = (t_data *)arg;
+//     printf("%d %d has taken a dongle", coder->compile_count, coder->id);
+
+//     return NULL;
+// }
+
+// void create_threads(t_data *data)
+// {
+//     int i;
+
+
+//     i = 0;
+//     while (i < data->number_of_coders)
+//     {
+//         pthread_create(
+//             &data->coders[i].thread,
+//             NULL,
+//             coder_routing,
+//             &data->coders[i]
+//         );
+//         i++;
+//     }
+//     i = 0;
+//     while (i < data->number_of_coders)
+//         pthread_join(data->coders[i++].thread, NULL);
 // }
