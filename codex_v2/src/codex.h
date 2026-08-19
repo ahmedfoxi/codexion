@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/18 18:48:45 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/08/19 20:01:43 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_dongle
 
 typedef struct s_coder
 {
-	// struct s_data  		*data;
 	int						id;
 	pthread_t		thread;
 	t_dongle		*left;
