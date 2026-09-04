@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/19 20:01:43 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/04 21:20:58 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 typedef struct s_request
 {
 	int		coder_id;
-	int 	dongle_left;
-	int 	dongle_right;
 	long	arrival_time;
 	long	deadline;
 }	t_request;
@@ -71,6 +69,8 @@ typedef struct s_data
 	long			dongle_cooldown;
 	int				scheduler;
 
+	long			start_time;
+	
 	t_coder			*coders;
 	t_dongle		*dongles;
 
@@ -84,19 +84,38 @@ typedef struct s_data
 
 void affiche(t_data *data); //for test
 
+
 long	ft_atoi(char *str);
-int	is_digits(char *str);
+int		is_digits(char *str);
 t_data	*ft_parse(char **args);
 t_data	*get_args(char **args);
 
 void	coder_init(t_data *data);
 void	dongle_init(t_data *data);
+void	link_coder_dongle(t_data *data);
+
+t_request    request_dongle(t_data   *data, t_coder  *coder);
+void    request(t_data *data);
 
 void	*coder_routing(void *arg);
 void	create_threads(t_data *data);
 
 long	get_time_ms(void);
 void	precise_sleep(long ms, t_data *data);
+long    elapsed_ms(t_data   *data);
+
+
+// heap queue functions
+
+int     compare_request(t_request a, t_request b, int scheduler);
+void    heap_swap(t_request *a, t_request *b);
+int     heap_init(t_heap *heap, int capacity);
+void    heap_push(t_heap *heap, t_request req, int scheduler);
+t_request	heap_pop(t_heap *heap, int scheduler);
+t_request *pick_next(t_data *data, t_dongle *d);
+
+
+
 
 // void    print_log(t_coder *coder, const char *action);
 // static void	wait_for_dongle(t_dongle *dongle, t_coder *coder);

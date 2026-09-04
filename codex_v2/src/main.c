@@ -6,12 +6,17 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/08/18 17:53:12 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/04 20:11:44 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codex.h"
+# include "codex.h"
 
+
+void    start_simulation()
+{
+    
+}
 
 int main(int ac, char **av)
 {
@@ -26,7 +31,10 @@ int main(int ac, char **av)
     data = ft_parse(av);
     dongle_init(data);
     coder_init(data);
+    link_coder_dongle(data);
     affiche(data);
+    
+    data->start_time = get_time_ms();
 
 
     return (0);

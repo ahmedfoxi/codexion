@@ -40,11 +40,24 @@ void dongle_init(t_data *data)
 
         data->dongles[i].queue.capacity = 0;
         data->dongles[i].queue.size = 2;
-        data->dongles[i].queue.requests = malloc(sizeof(t_request) * 2);
-        if (!data->dongles[i].queue.requests)
-            return ;
         pthread_mutex_init(&data->dongles[i].mutex, NULL);
         pthread_cond_init(&data->dongles[i].cond, NULL);
+        i++;
+    }
+}
+
+void link_coder_dongle(t_data *data)
+{
+    int i;
+    int n;
+
+
+    n = data->number_of_coders;
+    i = 0;
+    while (i < n)
+    {
+        data->coders[i].left = &data->dongles[(i - 1 + n) % n];
+        data->coders[i].right = &data->dongles[i];
         i++;
     }
 }
@@ -56,7 +69,8 @@ void affiche(t_data *data)
 
     while (i < data->number_of_coders)
     {
-        printf("%d\n", data->dongles[i].queue.size);
+        printf("coder %d: left=dongle[%d] right=dongle[%d]\n",
+            data->coders[i].id, data->coders[i].left->id, data->coders[i].right->id);
         i++;
     }
 }
