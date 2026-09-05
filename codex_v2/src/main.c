@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/04 20:11:44 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/05 15:36:13 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int main(int ac, char **av)
     coder_init(data);
     link_coder_dongle(data);
     affiche(data);
-    
+    clean_up(data);   
     data->start_time = get_time_ms();
 
 

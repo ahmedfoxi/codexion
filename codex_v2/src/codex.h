@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/04 21:20:58 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/05 15:26:09 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ int     heap_init(t_heap *heap, int capacity);
 void    heap_push(t_heap *heap, t_request req, int scheduler);
 t_request	heap_pop(t_heap *heap, int scheduler);
 t_request *pick_next(t_data *data, t_dongle *d);
+void    clean_up(t_data *data);
 
 
 

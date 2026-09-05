@@ -1,32 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_up.c                                         :+:      :+:    :+:   */
+/*   routing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/18 17:17:56 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/05 15:30:18 by ahbarbou         ###   ########.fr       */
+/*   Created: 2026/09/05 15:41:05 by ahbarbou          #+#    #+#             */
+/*   Updated: 2026/09/05 15:41:31 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "codex.h"
 
-
-void    clean_up(t_data *data)
-{
-    int i;
-
-
-    i = 0;
-    while (i < data->number_of_coders)
-    {
-        if (data->dongles->queue.requests)
-            free(data->dongles->queue.requests);
-        i++;
-    }
-    free(data->dongles);
-    free(data->coders);
-    free(data);
-}
 
