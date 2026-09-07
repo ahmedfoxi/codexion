@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/18 17:55:31 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/04 21:31:31 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/06 15:33:10 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_request    request_dongle(t_data   *data, t_coder  *coder)
 
 
     request.coder_id = coder->id;
-    request.arrival_time = elapsed_ms(data);
+    request.arrival_order = elapsed_ms(data);
     request.deadline = coder->last_compile + data->time_to_burnout;
 
     return (request);

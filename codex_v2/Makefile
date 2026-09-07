@@ -7,8 +7,14 @@ CFLAGS = -Wall -Wextra -Werror -g -pthread
 SRCS =  src/main.c \
 		src/initialization.c \
 		src/parser.c \
+		src/heap_queue.c \
 		src/time_calule.c \
 		src/clean_up.c \
+		src/routing.c \
+		src/aquire_dongle.c \
+		src/dongle_utils.c \
+		src/monitor.c \
+		src/log_action.c \
 
 OBJS = $(SRCS:.c=.o)
 

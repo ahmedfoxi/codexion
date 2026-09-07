@@ -6,16 +6,54 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/05 15:36:13 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/07 23:42:01 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "codex.h"
 
 
-void    start_simulation()
+void	wake_all(t_data *data)
 {
-    
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_coders)
+	{
+		pthread_mutex_lock(&data->dongles[i].mutex);
+		pthread_cond_broadcast(&data->dongles[i].cond);
+		pthread_mutex_unlock(&data->dongles[i].mutex);
+		i++;
+	}
+}
+
+void    start_simulation(t_data *data)
+{
+    int i;
+
+
+    data->start_time = get_time_ms();
+    i = 0;
+    while (i < data->number_of_coders)
+        data->coders[i++].last_compile = data->start_time;
+
+    data->runing = 1;
+
+
+    pthread_create(&data->monitor, NULL, monitor_routine, data);
+    i = 0;
+    while (i < data->number_of_coders)
+    {
+        pthread_create(&data->coders[i].thread, NULL, coder_routine, &data->coders[i]);
+        i++;
+    }
+
+    pthread_join(data->monitor, NULL);
+    wake_all(data);
+    i = 0;
+    while (i < data->number_of_coders)
+        pthread_join(data->coders[i++].thread, NULL);
+
 }
 
 int main(int ac, char **av)
@@ -33,67 +71,9 @@ int main(int ac, char **av)
     coder_init(data);
     link_coder_dongle(data);
     affiche(data);
-    clean_up(data);   
-    data->start_time = get_time_ms();
-
+    printf("start simulation");
+    start_simulation(data);
+    clean_up(data);
 
     return (0);
 }
-
-// void *monitor_routing(void *arg)
-// {
-//     t_data *data;
-
-
-//     data = (t_data *)arg;
-//     while (!data->stop)
-//     {
-//         //check last_compile and count_compile
-//     }
-
-//     return NULL;
-// }
-
-// void merge(t_data *data)
-// {
-//     // initialization
-//     coders_init(data);
-//     dongles_init(data);
-//     create_threads(data);
-
-//     // create monitor thread
-//     pthread_create(&data->monitor, NULL, monitor_routing, data);
-//     pthread_join(data->monitor, NULL);
-
-// }
-
-// void *coder_routing(void *arg)
-// {
-//     t_coder *coder;
-
-//     coder = (t_data *)arg;
-//     printf("%d %d has taken a dongle", coder->compile_count, coder->id);
-
-//     return NULL;
-// }
-
-// void create_threads(t_data *data)
-// {
-//     int i;
-
-
-//     i = 0;
-//     while (i < data->number_of_coders)
-//     {
-//         pthread_create(
-//             &data->coders[i].thread,
-//             NULL,
-//             coder_routing,
-//             &data->coders[i]
-//         );
-//         i++;
-//     }
-//     i = 0;
-//     while (i < data->number_of_coders)
-//         pthread_join(data->coders[i++].thread, NULL);
-// }

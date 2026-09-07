@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 13:00:19 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/05 15:38:28 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/06 16:05:15 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ t_data  *get_args(char **args)
         data->scheduler = 0;
     if (strcmp(args[8], "edf") == 0)
         data->scheduler = 1;
+    data->request_counter = 0;
+    data->runing = 1;
 
     return (data);
 }

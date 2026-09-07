@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 14:45:00 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/04 12:02:55 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/07 22:45:25 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@ long    get_time_ms(void)
     return ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000L));
 }
 
+void	ft_usleep(long ms, t_data *data)
+{
+	long	start;
+
+	start = get_time_ms();
+	while (get_time_ms() - start < ms)
+	{
+		if (!is_running(data))
+			break ;
+		usleep(500);
+	}
+}
+
 void    precise_sleep(long ms, t_data *data)
 {
     long    start;
@@ -30,13 +43,13 @@ void    precise_sleep(long ms, t_data *data)
     start = get_time_ms();
     while(get_time_ms() - start < ms)
     {
-        pthread_mutex_lock(&data->stop_mutex);
-        if (data->stop)
+        pthread_mutex_lock(&data->simulation_mutex);
+        if (data->runing)
         {
-            pthread_mutex_unlock(&data->stop_mutex);
+            pthread_mutex_unlock(&data->simulation_mutex);
             break;
         }
-        pthread_mutex_unlock(&data->stop_mutex);
+        pthread_mutex_unlock(&data->simulation_mutex);
         usleep(250);
     }
 }

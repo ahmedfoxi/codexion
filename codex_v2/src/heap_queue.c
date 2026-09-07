@@ -6,27 +6,27 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:15:10 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/04 20:44:22 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/07 23:24:03 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codex.h"
 
 
-int     compare_request(t_request a, t_request b, int scheduler)
+int     compare_requests(t_request a, t_request b, int scheduler)
 {
     // fifo
     if (scheduler == 0)
     {
-        if (a.arrival_time != b.arrival_time)
-            return (a.arrival_time < b.arrival_time);
+        if (a.arrival_order != b.arrival_order)
+            return (a.arrival_order < b.arrival_order);
         return (a.coder_id < b.coder_id);
     }
     // edf
     if (a.deadline != b.deadline)
         return (a.deadline < b.deadline);
-    if (a.arrival_time != b.arrival_time)
-        return (a.arrival_time < b.arrival_time);
+    if (a.arrival_order != b.arrival_order)
+        return (a.arrival_order < b.arrival_order);
     return (a.coder_id < b.coder_id);
 }
 
@@ -63,7 +63,7 @@ void    heap_push(t_heap *heap, t_request req, int scheduler)
     while (i > 0)
     {
         parent = (i - 1) / 2;
-        if (compare_request(heap->requests[i], heap->requests[parent], scheduler))
+        if (compare_requests(heap->requests[i], heap->requests[parent], scheduler))
         {
             heap_swap(&heap->requests[i], &heap->requests[parent]);
             i = parent;
@@ -106,14 +106,13 @@ t_request	heap_pop(t_heap *heap, int scheduler)
 	return (min_req);
 }
 
-
-t_request *pick_next(t_data *data, t_dongle *d)
+t_request *pick_next(t_dongle *d)
 {
     if (d->queue.size == 0)
         return (NULL);
-    if (d->queue.size == 1)
-        return (&d->queue.requests[0]);
-    if (request_key(data, &d->queue.requests[0]) <= request_key(data, &d->queue.requests[1]))
-        return (&d->queue.requests[0]);
-    return (&d->queue.requests[1]);
+    // if (d->queue.size == 1)
+    //     return (&d->queue.requests[0]);
+    // if (request_key(data, &d->queue.requests[0]) <= request_key(data, &d->queue.requests[1]))
+    //     return (&d->queue.requests[0]);
+    return (&d->queue.requests[0]);
 }
