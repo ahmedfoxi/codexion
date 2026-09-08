@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 15:02:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 22:57:42 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/08 21:02:40 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ void	take_dongles(t_coder *coder, t_data *data)
 	acquire_dongle(coder, data, first);
 	if (!is_running(data))
 		return ;
-	log_action(data, "has taken a dongle");
+	log_action(data, coder->id, "has taken a dongle");
 	acquire_dongle(coder, data, second);
 	if (!is_running(data))
 		return ;
-	log_action(data, "has taken a dongle");
+	log_action(data, coder->id, "has taken a dongle");
 }

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 23:31:25 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:46:15 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,7 @@ typedef struct s_data
 
 	t_coder			*coders;
 	t_dongle		*dongles;
-	
-	int				compile_counter;
+
 	int				request_counter;
 
 	pthread_t		monitor;
@@ -153,7 +152,7 @@ void	check_all_done(t_data *data);
 void    handle_bournout(t_data   *data, int  idx, long   now);
 
 // log action
-void    log_action(t_data *data, char   *msg);
+void    log_action(t_data *data, int id, char   *msg);
 int is_running(t_data *data);
 
 

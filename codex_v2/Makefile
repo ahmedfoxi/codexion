@@ -2,7 +2,7 @@ NAME = codex
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 
 SRCS =  src/main.c \
 		src/initialization.c \

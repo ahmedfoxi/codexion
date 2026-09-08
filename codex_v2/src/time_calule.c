@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 14:45:00 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 22:45:25 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/08 18:21:47 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_usleep(long ms, t_data *data)
 	{
 		if (!is_running(data))
 			break ;
-		usleep(500);
+		usleep(100);
 	}
 }
 
@@ -50,7 +50,7 @@ void    precise_sleep(long ms, t_data *data)
             break;
         }
         pthread_mutex_unlock(&data->simulation_mutex);
-        usleep(250);
+        usleep(10);
     }
 }
 

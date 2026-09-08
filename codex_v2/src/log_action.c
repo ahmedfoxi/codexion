@@ -6,17 +6,18 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 16:38:44 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 22:49:12 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:45:02 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "codex.h"
 
 
-void    log_action(t_data *data, char   *msg)
+void    log_action(t_data *data, int id, char   *msg)
 {
     pthread_mutex_lock(&data->log_mutex);
-    printf("%s", msg);
+    if (is_running(data))
+        printf("%ld %d %s\n", get_time_ms() - data->start_time, id, msg);
     pthread_mutex_unlock(&data->log_mutex);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 15:41:05 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 22:54:07 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:49:39 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	compile_cycle(t_coder *coder, t_data *data)
 	pthread_mutex_lock(&coder->coder_mutex);
 	coder->last_compile = get_time_ms();
 	pthread_mutex_unlock(&coder->coder_mutex);
-	log_action(data, "is compiling");
+	log_action(data, coder->id, "is compiling");
 	ft_usleep(data->time_to_compile, data);
 	release_dongles(coder);
 	pthread_mutex_lock(&coder->coder_mutex);
@@ -44,9 +44,9 @@ void	*coder_routine(void *arg)
 			break ;
 		if (!is_running(data))
 			break ;
-		log_action(data, "is debugging");
+		log_action(data, coder->id, "is debugging");
 		ft_usleep(data->time_to_debug, data);
-		log_action(data, "is refactoring");
+		log_action(data, coder->id, "is refactoring");
 		ft_usleep(data->time_to_refactor, data);
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 18:36:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 23:09:47 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/08 17:05:28 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,15 @@ void    check_burnout(t_data *data)
         pthread_mutex_lock(&data->coders[i].coder_mutex);
         if (data->coders[i].compile_count >= data->number_of_compiles_required)
         {
-            pthread_mutex_unlock(&data->coders[i].coder_mutex);
-            continue;
+            pthread_mutex_unlock(&data->coders[i++].coder_mutex);
+            continue ;
         }
         now = get_time_ms();
         if (now - data->coders[i].last_compile >= data->time_to_burnout)
         {
             pthread_mutex_unlock(&data->coders[i].coder_mutex);
-            handle_bournout(data, data->coders[i].id, now);
-            continue;
+            handle_bournout(data, i, now);
+            return ;
         }
         pthread_mutex_unlock(&data->coders[i].coder_mutex);
         i++;
@@ -85,7 +85,7 @@ void	*monitor_routine(void *arg)
 		if (!is_running(data))
 			break ;
 		check_all_done(data);
-		usleep(1000);
+		usleep(100);
 	}
 	return (NULL);
 }
