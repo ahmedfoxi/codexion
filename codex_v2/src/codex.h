@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/08 15:46:15 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/09 23:23:23 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ typedef struct s_data
 	pthread_mutex_t	simulation_mutex;
 	pthread_mutex_t counter_mutex;
 
+	// pthread_mutex_t test_mutex;
+
 	int				runing;
 }	t_data;
 
@@ -100,9 +102,11 @@ t_data	*get_args(char **args);
 void    start_simulation(t_data *data);
 
 
-void	coder_init(t_data *data);
-void	dongle_init(t_data *data);
-void	link_coder_dongle(t_data *data);
+void 	init_data(t_data *data);
+// void	coder_init(t_data *data);
+// void	dongle_init(t_data *data);
+// void	link_coder_dongle(t_data *data);
+
 
 
 void	*coder_routing(void *arg);

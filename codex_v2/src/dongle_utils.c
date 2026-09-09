@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:07:33 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 17:19:41 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/09 15:53:15 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ void	get_dongle_order(t_coder *coder, t_dongle **first, t_dongle **second)
 {
 	if (coder->left_idx <= coder->right_idx)
 	{
+		// printf("%d <= %d", coder->left_idx, coder->right_idx);
 		*first = coder->left;
 		*second = coder->right;
 	}
 	else
 	{
+		// printf("%d > %d", coder->left_idx, coder->right_idx);
 		*first = coder->right;
 		*second = coder->left;
 	}

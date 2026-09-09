@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:15:10 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/07 23:24:03 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/09 23:26:13 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,3 +116,62 @@ t_request *pick_next(t_dongle *d)
     //     return (&d->queue.requests[0]);
     return (&d->queue.requests[0]);
 }
+
+// int main()
+// {
+//     t_heap  queue;
+//     t_request req_1;
+//     t_request req_2;
+//     t_request req_3;
+//     int i = 0;
+
+//     heap_init(&queue, 2);
+//     queue.size = 0;
+//     queue.capacity = 2;
+
+//     req_1.coder_id = 0;
+//     req_1.arrival_order = 111;
+//     req_1.deadline = 111;
+
+//     req_2.coder_id = 1;
+//     req_2.arrival_order = 222;
+//     req_2.deadline = 222;
+
+//     req_3.coder_id = 2;
+//     req_3.arrival_order = 333;
+//     req_3.deadline = 333;
+
+//     heap_push(&queue, req_1, 0);
+//     heap_push(&queue, req_2, 0);
+
+//     while (i < queue.capacity)
+//     {
+//         printf(
+//             "%d) id: %d, order: %ld, deadline: %ld\n",
+//             i,
+//             queue.requests[i].coder_id,
+//             queue.requests[i].arrival_order,
+//             queue.requests[i].deadline
+//         );
+//         i++;
+//     }
+//     heap_pop(&queue, 0);
+//     heap_push(&queue, req_3, 0);
+   
+//     i = 0;
+//     printf("second capacity %d\n", queue.capacity);
+//     while (i < queue.capacity)
+//     {
+//         printf(
+//             "%d) id: %d, order: %ld, deadline: %ld\n",
+//             i,
+//             queue.requests[i].coder_id,
+//             queue.requests[i].arrival_order,
+//             queue.requests[i].deadline
+//         );
+//         i++;
+//     }
+//     heap_pop(&queue, 0);
+//     heap_pop(&queue, 0);
+//     printf("therd capacity: %d", queue.size);
+// }

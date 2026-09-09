@@ -18,6 +18,7 @@ void coder_init(t_data *data)//possible add pointer function and arg for pthread
         data->coders[i].last_compile = 0;
         data->coders[i].compile_count = 0;
         data->coders[i].data = data; // rev
+        pthread_mutex_init(&data->coders[i].coder_mutex, NULL);
         i++;
     }
 }
@@ -39,8 +40,6 @@ void dongle_init(t_data *data)
         data->dongles[i].available = 1;
         data->dongles[i].available_at = 0;
 
-        // data->dongles[i].queue.capacity = 0;
-        // data->dongles[i].queue.size = 2;
         heap_init(&data->dongles[i].queue, 2);
 
         pthread_mutex_init(&data->dongles[i].mutex, NULL);
@@ -76,4 +75,16 @@ void affiche(t_data *data)
             data->coders[i].id, data->coders[i].left->id, data->coders[i].right->id);
         i++;
     }
+}
+
+void    init_data(t_data *data)
+{
+    dongle_init(data);
+    coder_init(data);
+    link_coder_dongle(data);    
+    
+    pthread_mutex_init(&data->counter_mutex, NULL);
+    pthread_mutex_init(&data->log_mutex, NULL);
+    pthread_mutex_init(&data->counter_mutex, NULL);
+
 }
