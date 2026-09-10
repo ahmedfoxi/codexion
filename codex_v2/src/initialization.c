@@ -1,13 +1,12 @@
 # include "codex.h"
 
 
-void coder_init(t_data *data)//possible add pointer function and arg for pthread_create().
+void coder_init(t_data *data)
 {
     int i;
 
 
     i = 0;
-    // free
     data->coders = malloc(sizeof(t_coder) * data->number_of_coders);
     if (!data->coders)
         return ;
@@ -38,7 +37,6 @@ void dongle_init(t_data *data)
     {
         data->dongles[i].id = i + 1;
         data->dongles[i].available = 1;
-        data->dongles[i].available_at = 0;
 
         heap_init(&data->dongles[i].queue, 2);
 
@@ -64,6 +62,20 @@ void link_coder_dongle(t_data *data)
     }
 }
 
+void ft_indexing(t_data    *data)
+{
+    int i;
+
+
+    i = 0;
+    while (i < data->number_of_coders)
+    {
+        data->coders[i].left_idx = data->coders[i].left->id;
+        data->coders[i].right_idx = data->coders[i].right->id;
+        i++;
+    }
+}
+
 void affiche(t_data *data)
 {
     int     i=0;
@@ -82,9 +94,11 @@ void    init_data(t_data *data)
     dongle_init(data);
     coder_init(data);
     link_coder_dongle(data);    
-    
+    ft_indexing(data);
+
     pthread_mutex_init(&data->counter_mutex, NULL);
     pthread_mutex_init(&data->log_mutex, NULL);
-    pthread_mutex_init(&data->counter_mutex, NULL);
+    pthread_mutex_init(&data->simulation_mutex, NULL);
+    pthread_mutex_init(&data->test_mutex, NULL);
 
 }

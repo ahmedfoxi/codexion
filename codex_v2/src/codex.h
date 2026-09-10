@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/09 23:23:23 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/10 15:40:08 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_dongle
 	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
 	int				available;
-	long			available_at;
 	long			last_release;
 	t_heap			queue; // the queue must be pointer
 }	t_dongle;
@@ -86,8 +85,9 @@ typedef struct s_data
 	pthread_mutex_t	log_mutex;
 	pthread_mutex_t	simulation_mutex;
 	pthread_mutex_t counter_mutex;
+	
+	pthread_mutex_t test_mutex;
 
-	// pthread_mutex_t test_mutex;
 
 	int				runing;
 }	t_data;
@@ -103,9 +103,10 @@ void    start_simulation(t_data *data);
 
 
 void 	init_data(t_data *data);
-// void	coder_init(t_data *data);
-// void	dongle_init(t_data *data);
-// void	link_coder_dongle(t_data *data);
+void	coder_init(t_data *data);
+void	dongle_init(t_data *data);
+void	link_coder_dongle(t_data *data);
+void ft_indexing(t_data    *data);
 
 
 

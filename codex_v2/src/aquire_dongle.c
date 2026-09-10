@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 15:02:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/09 17:30:39 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/10 15:28:12 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,18 @@ void	take_dongles(t_coder *coder, t_data *data)
 	if (!is_running(data))
 		return ;
 	log_action(data, coder->id, "has taken a dongle");
+
+	// pthread_mutex_lock(&data->test_mutex);
+	// printf("--------------------------dongle id: %d\n", first->id);
+	// pthread_mutex_unlock(&data->test_mutex);
+
 	acquire_dongle(coder, data, second);
 	if (!is_running(data))
 		return ;
 	log_action(data, coder->id, "has taken a dongle");
+
+	// pthread_mutex_lock(&data->test_mutex);
+	// printf("--------------------------dongle id: %d\n", second->id);
+	// pthread_mutex_unlock(&data->test_mutex);
+
 }

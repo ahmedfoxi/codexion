@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:15:10 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/09 23:26:13 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/10 09:27:22 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,6 @@ t_request *pick_next(t_dongle *d)
 {
     if (d->queue.size == 0)
         return (NULL);
-    // if (d->queue.size == 1)
-    //     return (&d->queue.requests[0]);
-    // if (request_key(data, &d->queue.requests[0]) <= request_key(data, &d->queue.requests[1]))
-    //     return (&d->queue.requests[0]);
     return (&d->queue.requests[0]);
 }
 

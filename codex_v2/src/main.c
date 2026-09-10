@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/09 23:20:13 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/10 11:05:01 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void    start_simulation(t_data *data)
 
 
     data->start_time = get_time_ms();
-
     i = 0;
     while (i < data->number_of_coders)
         data->coders[i++].last_compile = data->start_time;

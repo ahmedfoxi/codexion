@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/18 17:17:56 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/09 23:33:05 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/10 13:29:11 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,12 @@ void    clean_up(t_data *data)
             free(data->dongles[i].queue.requests);
         i++;
     }
-    
+
     pthread_mutex_destroy(&data->log_mutex);
     pthread_mutex_destroy(&data->simulation_mutex);
     pthread_mutex_destroy(&data->counter_mutex);
-    
+    pthread_mutex_destroy(&data->test_mutex);
+
     destroy_mutex(data);
 
     free(data->dongles);
