@@ -39,7 +39,7 @@ void dongle_init(t_data *data)
         data->dongles[i].available = 1;
         data->dongles[i].last_release = 0;
 
-        heap_init(&data->dongles[i].queue, data->number_of_coders);
+        heap_init(&data->dongles[i].queue, data->number_of_compiles_required * 2);
 
         pthread_mutex_init(&data->dongles[i].mutex, NULL);
         pthread_cond_init(&data->dongles[i].cond, NULL);

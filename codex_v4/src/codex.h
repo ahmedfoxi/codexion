@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 17:25:54 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/13 15:17:29 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 typedef struct s_request
 {
 	int		coder_id;
-	int		left_dongle;
-	int		right_dongle;
 	long long	arrival_order;
 	long long	deadline;
 }	t_request;
@@ -88,8 +86,7 @@ typedef struct s_data
 	pthread_mutex_t	simulation_mutex;
 	pthread_mutex_t counter_mutex;
 	
-	pthread_mutex_t state_mutex;
-	pthread_cond_t state_cond;
+	pthread_mutex_t test_mutex;
 
 
 	int				runing;
@@ -135,16 +132,16 @@ void    clean_up(t_data *data);
 
 // aquire dongle
 
-// int	cooldown_ok(t_dongle *dongle, t_data *data);
-// int	can_take(t_dongle *dongle, int coder_id);
-// void	wait_cooldown(t_dongle *dongle, t_data *data);
-// void	acquire_dongle(t_coder *coder, t_data *data, t_dongle *dongle);
+int	cooldown_ok(t_dongle *dongle, t_data *data);
+int	can_take(t_dongle *dongle, int coder_id);
+void	wait_cooldown(t_dongle *dongle, t_data *data);
+void	acquire_dongle(t_coder *coder, t_data *data, t_dongle *dongle);
 void	take_dongles(t_coder *coder, t_data *data);
 
 // dongle utils
 
-// void	release_dongle(t_dongle *dongle);
-void	release_dongles(t_coder *coder, t_data *data);
+void	release_dongle(t_dongle *dongle);
+void	release_dongles(t_coder *coder);
 void	get_dongle_order(t_coder *coder, t_dongle **first, t_dongle **second);
 
 // routing

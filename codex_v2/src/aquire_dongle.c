@@ -6,12 +6,58 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 15:02:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/10 15:28:12 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:28:32 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "codex.h"
 
+
+static long	cooldown_remaining(t_dongle *dongle, t_data *data)
+{
+	long	elapsed;
+
+	if (dongle->last_release == 0)
+		return (0);
+	elapsed = get_time_ms() - dongle->last_release;
+	if (elapsed >= data->dongle_cooldown)
+		return (0);
+	return (data->dongle_cooldown - elapsed);
+}
+
+static long	get_cooldown_wait(t_coder *coder, t_data *data)
+{
+	long	left;
+	long	right;
+
+	left = cooldown_remaining(coder->left, data);
+	right = cooldown_remaining(coder->right, data);
+	if (left > right)
+		return (left);
+	return (right);
+}
+
+static void	wait_state_timeout(t_data *data, long wait_ms)
+{
+	struct timespec	ts;
+
+	clock_gettime(CLOCK_REALTIME, &ts);
+
+	ts.tv_sec += wait_ms / 1000;
+	ts.tv_nsec += (wait_ms % 1000) * 1000000;
+
+	if (ts.tv_nsec >= 1000000000)
+	{
+		ts.tv_sec++;
+		ts.tv_nsec -= 1000000000;
+	}
+
+	pthread_cond_timedwait(
+		&data->state_cond,
+		&data->state_mutex,
+		&ts
+	);
+}
 
 int	cooldown_ok(t_dongle *dongle, t_data *data)
 {
@@ -39,73 +85,82 @@ void	wait_cooldown(t_dongle *dongle, t_data *data)
 	pthread_cond_timedwait(&dongle->cond, &dongle->mutex, &ts);
 }
 
-int can_take(t_dongle *dongle, int coder_id)
+static int can_take_two(t_coder *coder, t_data *data)
 {
-    t_request *top;
+	t_request *left_top;
+	t_request *right_top;
 
 
-    if (dongle->queue.size == 0)
-        return (0);
-    top = pick_next(dongle);
-	if (top->coder_id != coder_id)
+	if (coder->left->queue.size == 0 || coder->right->queue.size == 0)
 		return (0);
-	if (!dongle->available)
+
+	left_top = pick_next(coder->left);
+	right_top = pick_next(coder->right);
+
+	if (left_top->coder_id != coder->id ||right_top->coder_id != coder->id)
 		return (0);
+
+	if (!coder->left->available || !coder->right->available)
+		return (0);
+
+	if (!cooldown_ok(coder->left, data) || !cooldown_ok(coder->right, data))
+		return (0);
+
 	return (1);
 }
 
-void	acquire_dongle(t_coder *coder, t_data *data, t_dongle *dongle)
+static void	acquire_dongle(t_coder *coder, t_data *data)
 {
 	t_request	req;
 
+
 	req.coder_id = coder->id;
 	req.deadline = coder->last_compile + data->time_to_burnout;
+
 	pthread_mutex_lock(&data->counter_mutex);
 	req.arrival_order = data->request_counter++;
 	pthread_mutex_unlock(&data->counter_mutex);
 
-    pthread_mutex_lock(&dongle->mutex);
+	pthread_mutex_lock(&data->state_mutex);
 
-	heap_push(&dongle->queue, req, data->scheduler);
+	heap_push(&coder->left->queue, req, data->scheduler);
+	heap_push(&coder->right->queue, req, data->scheduler);
 
-    while (is_running(data)
-		&& (!can_take(dongle, coder->id) || !cooldown_ok(dongle, data)))
+    // while (is_running(data)
+	// 	&& !can_take_two(coder, data))
+	// {
+	// 	if (can_take_two(coder, data))
+	// 		wait_cooldown(coder->left, data);
+	// 	else
+	// 		pthread_cond_wait(&data->state_cond, &data->state_mutex);
+	// }
+
+	while (is_running(data)
+		&& !can_take_two(coder, data))
 	{
-		if (can_take(dongle, coder->id))
-			wait_cooldown(dongle, data);
+		long	wait_ms;
+
+		wait_ms = get_cooldown_wait(coder, data);
+		if (wait_ms > 0)
+			wait_state_timeout(data, wait_ms);
 		else
-			pthread_cond_wait(&dongle->cond, &dongle->mutex);
+			pthread_cond_wait(&data->state_cond, &data->state_mutex);
 	}
+
 	if (is_running(data))
 	{
-		heap_pop(&dongle->queue, data->scheduler);
-		dongle->available = 0;
+		heap_pop(&coder->left->queue, data->scheduler);
+		heap_pop(&coder->right->queue, data->scheduler);
+
+		coder->left->available = 0;
+		coder->right->available = 0;
 	}
-	pthread_mutex_unlock(&dongle->mutex);
+	pthread_mutex_unlock(&data->state_mutex);
 }
 
 void	take_dongles(t_coder *coder, t_data *data)
 {
-	t_dongle	*first;
-	t_dongle	*second;
-
-	get_dongle_order(coder, &first, &second);
-	acquire_dongle(coder, data, first);
-	if (!is_running(data))
-		return ;
+	acquire_dongle(coder, data);
 	log_action(data, coder->id, "has taken a dongle");
-
-	// pthread_mutex_lock(&data->test_mutex);
-	// printf("--------------------------dongle id: %d\n", first->id);
-	// pthread_mutex_unlock(&data->test_mutex);
-
-	acquire_dongle(coder, data, second);
-	if (!is_running(data))
-		return ;
 	log_action(data, coder->id, "has taken a dongle");
-
-	// pthread_mutex_lock(&data->test_mutex);
-	// printf("--------------------------dongle id: %d\n", second->id);
-	// pthread_mutex_unlock(&data->test_mutex);
-
 }

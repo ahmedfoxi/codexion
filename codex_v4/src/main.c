@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 13:44:07 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/11 20:45:44 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void    start_simulation(t_data *data)
     data->start_time = get_time_ms();
     i = 0;
     while (i < data->number_of_coders)
-        data->coders[i++].last_compile = data->start_time;
+        data->coders[i++].last_compile = get_time_ms();
 
     data->runing = 1;
     pthread_create(&data->monitor, NULL, monitor_routine, data);

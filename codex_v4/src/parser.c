@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 13:00:19 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 12:59:04 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/06 16:05:15 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int is_digits(char *str)
     return (1);
 }
 
-long long ft_atoi(char *str)
+long ft_atoi(char *str)
 {
     int i;
     long result;
@@ -44,7 +44,7 @@ long long ft_atoi(char *str)
     if (result > 2147483647)
     {
         write(2, "ERROR", 5);
-        return (0);
+        exit(1);
     }
 
     return (result);
@@ -61,14 +61,14 @@ t_data    *ft_parse(char **args)
         if (!is_digits(args[i]))
         {
             write(2, "ERROR", 5);
-            return (0);
+            exit(1);
         }
         i++;
     }
     if (strcmp(args[8], "fifo") != 0 && strcmp(args[8], "edf") != 0)
     {
         write(2, "ERROR", 5);
-        return (0);
+        exit(1);
     }
     return get_args(args);
 }

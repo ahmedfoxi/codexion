@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 15:41:05 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 19:36:23 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/12 16:39:52 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 int	compile_cycle(t_coder *coder, t_data *data)
-{	
+{
 	take_dongles(coder, data);
 	if (!is_running(data))
 		return (0);
@@ -22,12 +22,9 @@ int	compile_cycle(t_coder *coder, t_data *data)
 	coder->last_compile = get_time_ms();
 	// printf("coder %d last_copile: %ld", coder->id, coder->last_compile);
 	pthread_mutex_unlock(&coder->coder_mutex);
-	
 	log_action(data, coder->id, "is compiling");
 	ft_usleep(data->time_to_compile, data);
-	
-	release_dongles(coder, data);
-	
+	release_dongles(coder);
 	pthread_mutex_lock(&coder->coder_mutex);
 	coder->compile_count++;
 	pthread_mutex_unlock(&coder->coder_mutex);
@@ -41,10 +38,8 @@ void	*coder_routine(void *arg)
 
 	coder = (t_coder *)arg;
 	data = coder->data;
-
-	if (coder->id % 2 == 0)
+	if (coder->id % 2 != 0)
 		ft_usleep(data->time_to_compile / 2, data);
-
 	while (is_running(data)
 		&& coder->compile_count < data->number_of_compiles_required)
 	{

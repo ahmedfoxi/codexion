@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 14:45:00 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/11 22:57:31 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/12 16:34:59 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_usleep(long long ms, t_data *data)
 	{
 		if (!is_running(data))
 			break ;
-		usleep(1000);
+		usleep(500);
 	}
 }
 

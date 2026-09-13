@@ -6,38 +6,26 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:07:33 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 18:42:59 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/10 15:56:23 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "codex.h"
 
 
-void	release_dongle(t_dongle *dongle, t_data *data)
+void	release_dongle(t_dongle *dongle)
 {
-	pthread_mutex_lock(&data->state_mutex);
-
+	pthread_mutex_lock(&dongle->mutex);
 	dongle->available = 1;
 	dongle->last_release = get_time_ms();
-
-	pthread_cond_broadcast(&data->state_cond);
-
-	pthread_mutex_unlock(&data->state_mutex);
+	pthread_cond_broadcast(&dongle->cond);
+	pthread_mutex_unlock(&dongle->mutex);
 }
 
-void	release_dongles(t_coder *coder, t_data *data)
+void	release_dongles(t_coder *coder)
 {
-	pthread_mutex_lock(&data->state_mutex);
-
-	coder->left->available = 1;
-	coder->left->last_release = get_time_ms();
-	
-	coder->right->available = 1;
-	coder->right->last_release = get_time_ms();
-
-	pthread_cond_broadcast(&data->state_cond);
-
-	pthread_mutex_unlock(&data->state_mutex);
+	release_dongle(coder->left);
+	release_dongle(coder->right);
 }
 
 void	get_dongle_order(t_coder *coder, t_dongle **first, t_dongle **second)

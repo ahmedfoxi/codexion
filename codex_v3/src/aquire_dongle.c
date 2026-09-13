@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 15:02:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/12 22:43:38 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/13 12:40:38 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int can_take(t_coder *coder, int coder_id)
 	return (1);
 }
 
-
 void	add_request(t_coder	*coder, t_data	*data, t_request	req)
 {
 	t_dongle	*first;
@@ -95,20 +94,20 @@ void	add_request(t_coder	*coder, t_data	*data, t_request	req)
 	pthread_mutex_unlock(&second->mutex);
 }
 
-void	remove_request(t_coder	*coder, t_data	*data, t_request	req)
+void	remove_request(t_coder	*coder, t_data	*data)
 {
 	t_dongle	*first;
 	t_dongle	*second;
-	
-	
+
+
 	get_dongle_order(coder, &first, &second);
-	
+
 	pthread_mutex_lock(&first->mutex);
 	pthread_mutex_lock(&second->mutex);
-	
+
 	heap_pop(&first->queue, data->scheduler);
 	heap_pop(&second->queue, data->scheduler);
-	
+
 	pthread_mutex_unlock(&first->mutex);
 	pthread_mutex_unlock(&second->mutex);
 }
@@ -126,27 +125,28 @@ void	acquire_dongle(t_coder *coder, t_data *data)
 	req.arrival_order = data->request_counter++;
 	pthread_mutex_unlock(&data->counter_mutex);
 
-	pthread_mutex_lock(&coder->coder_mutex);
-
-	heap_push(&coder->left->queue, req, data->scheduler);
-	heap_push(&coder->right->queue, req, data->scheduler);
+	add_request(coder, data, req);
 
 	while (is_running(data)
 		&& (!can_take(coder, coder->id) || !request_can_run(&req, data)))
 	{
-		if (request_can_run(&req, data))
+		if (can_take(coder, coder->id))
 			wait_cooldown(coder->left, data);
 		else
 			pthread_cond_wait(&coder->left->cond, &coder->left->mutex);
 	}
 	if (is_running(data))
 	{
-		heap_pop(&coder->left->queue, data->scheduler);
+		remove_request(coder, data);
 		log_action(data, coder->id, "has taken a dongle");
-		heap_pop(&coder->right->queue, data->scheduler);
 		log_action(data, coder->id, "has taken a dongle");
+
+		pthread_mutex_lock(&coder->left->mutex);
 		coder->left->available = 0;
+		pthread_mutex_unlock(&coder->left->mutex);
+
+		pthread_mutex_lock(&coder->right->mutex);
 		coder->right->available = 0;
+		pthread_mutex_unlock(&coder->right->mutex);
 	}
-	pthread_mutex_unlock(&coder->coder_mutex);
 }

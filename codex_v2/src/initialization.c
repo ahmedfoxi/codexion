@@ -37,8 +37,9 @@ void dongle_init(t_data *data)
     {
         data->dongles[i].id = i + 1;
         data->dongles[i].available = 1;
+        data->dongles[i].last_release = 0;
 
-        heap_init(&data->dongles[i].queue, 2);
+        heap_init(&data->dongles[i].queue, data->number_of_compiles_required * 2);
 
         pthread_mutex_init(&data->dongles[i].mutex, NULL);
         pthread_cond_init(&data->dongles[i].cond, NULL);
@@ -93,12 +94,12 @@ void    init_data(t_data *data)
 {
     dongle_init(data);
     coder_init(data);
-    link_coder_dongle(data);    
+    link_coder_dongle(data);
     ft_indexing(data);
 
     pthread_mutex_init(&data->counter_mutex, NULL);
     pthread_mutex_init(&data->log_mutex, NULL);
     pthread_mutex_init(&data->simulation_mutex, NULL);
-    pthread_mutex_init(&data->test_mutex, NULL);
+    // pthread_mutex_init(&data->test_mutex, NULL);
 
 }
