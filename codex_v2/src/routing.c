@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 15:41:05 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 19:36:23 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 21:23:49 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,21 @@
 
 
 int	compile_cycle(t_coder *coder, t_data *data)
-{	
+{
 	take_dongles(coder, data);
 	if (!is_running(data))
 		return (0);
 	pthread_mutex_lock(&coder->coder_mutex);
 	coder->last_compile = get_time_ms();
-	// printf("coder %d last_copile: %ld", coder->id, coder->last_compile);
+	// printf("d: %d, d: %d\n", coder->left->id, coder->right->id);
+	// printf("coder: %d , *deadline: %lld\n", coder->id, coder->last_compile + data->time_to_burnout);
 	pthread_mutex_unlock(&coder->coder_mutex);
-	
+
 	log_action(data, coder->id, "is compiling");
 	ft_usleep(data->time_to_compile, data);
-	
+
 	release_dongles(coder, data);
-	
+
 	pthread_mutex_lock(&coder->coder_mutex);
 	coder->compile_count++;
 	pthread_mutex_unlock(&coder->coder_mutex);

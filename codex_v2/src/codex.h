@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:07 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 17:25:54 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 17:00:37 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ typedef struct s_heap
 typedef struct s_dongle
 {
 	int				id;
-	pthread_mutex_t	mutex;
-	pthread_cond_t	cond;
+	// pthread_mutex_t	mutex;
+	// pthread_cond_t	cond;
 	int				available;
 	long long		last_release;
 	t_heap			queue; // the queue must be pointer

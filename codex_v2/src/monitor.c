@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 18:36:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/11 22:57:11 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 15:48:31 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	*monitor_routine(void *arg)
 	{
 		check_burnout(data);
 		if (!is_running(data))
-			break ;
+            break ;
 		check_all_done(data);
 		usleep(100);
 	}

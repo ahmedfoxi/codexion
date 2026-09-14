@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/08 12:15:10 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/12 14:16:45 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 23:03:30 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int     compare_requests(t_request a, t_request b, int scheduler)
     if (scheduler == 0)
     {
         if (a.arrival_order != b.arrival_order)
-            return (a.arrival_order < b.arrival_order);
+            return (a.arrival_order > b.arrival_order);
         return (a.coder_id < b.coder_id);
     }
     // edf
@@ -55,7 +55,7 @@ void    heap_push(t_heap *heap, t_request req, int scheduler)
     int     parent;
 
 
-    if (heap->size > heap->capacity)
+    if (heap->size >= heap->capacity)
         return ;
     i = heap->size++;
     heap->requests[i] = req;

@@ -40,9 +40,6 @@ void dongle_init(t_data *data)
         data->dongles[i].last_release = 0;
 
         heap_init(&data->dongles[i].queue, data->number_of_compiles_required * 2);
-
-        pthread_mutex_init(&data->dongles[i].mutex, NULL);
-        pthread_cond_init(&data->dongles[i].cond, NULL);
         i++;
     }
 }
@@ -100,6 +97,7 @@ void    init_data(t_data *data)
     pthread_mutex_init(&data->counter_mutex, NULL);
     pthread_mutex_init(&data->log_mutex, NULL);
     pthread_mutex_init(&data->simulation_mutex, NULL);
-    // pthread_mutex_init(&data->test_mutex, NULL);
+    pthread_mutex_init(&data->state_mutex, NULL);
+    pthread_cond_init(&data->state_cond, NULL);
 
 }

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 15:02:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 19:28:32 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 19:27:31 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 static long	cooldown_remaining(t_dongle *dongle, t_data *data)
 {
 	long	elapsed;
+
 
 	if (dongle->last_release == 0)
 		return (0);
@@ -30,6 +31,7 @@ static long	get_cooldown_wait(t_coder *coder, t_data *data)
 	long	left;
 	long	right;
 
+
 	left = cooldown_remaining(coder->left, data);
 	right = cooldown_remaining(coder->right, data);
 	if (left > right)
@@ -39,25 +41,36 @@ static long	get_cooldown_wait(t_coder *coder, t_data *data)
 
 static void	wait_state_timeout(t_data *data, long wait_ms)
 {
-	struct timespec	ts;
+	pthread_mutex_unlock(&data->state_mutex);
 
-	clock_gettime(CLOCK_REALTIME, &ts);
+	usleep(wait_ms * 1000);
 
-	ts.tv_sec += wait_ms / 1000;
-	ts.tv_nsec += (wait_ms % 1000) * 1000000;
-
-	if (ts.tv_nsec >= 1000000000)
-	{
-		ts.tv_sec++;
-		ts.tv_nsec -= 1000000000;
-	}
-
-	pthread_cond_timedwait(
-		&data->state_cond,
-		&data->state_mutex,
-		&ts
-	);
+	pthread_mutex_lock(&data->state_mutex);
 }
+
+// static void	wait_state_timeout(t_data *data, long wait_ms)
+// {
+// 	struct timespec	ts;
+
+
+// 	clock_gettime(CLOCK_REALTIME, &ts);
+
+// 	ts.tv_sec += wait_ms / 1000;
+// 	ts.tv_nsec += (wait_ms % 1000) * 1000000;
+
+// 	if (ts.tv_nsec >= 1000000000)
+// 	{
+// 		ts.tv_sec++;
+// 		ts.tv_nsec -= 1000000000;
+// 	}
+
+// 	pthread_cond_timedwait(
+// 		&data->state_cond,
+// 		&data->state_mutex,
+// 		&ts
+// 	);
+// 	// ft_usleep(wait_ms, data);
+// }
 
 int	cooldown_ok(t_dongle *dongle, t_data *data)
 {
@@ -68,35 +81,27 @@ int	cooldown_ok(t_dongle *dongle, t_data *data)
 	return (0);
 }
 
-void	wait_cooldown(t_dongle *dongle, t_data *data)
-{
-	struct timeval	tv;
-	struct timespec	ts;
-	long	elapsed;
-	long	remaining;
-
-	elapsed = get_time_ms() - dongle->last_release;
-	if (elapsed >= data->dongle_cooldown)
-		return ;
-	remaining = data->dongle_cooldown - elapsed;
-	gettimeofday(&tv, NULL);
-	ts.tv_sec = tv.tv_sec + (tv.tv_usec / 1000 + remaining) / 1000;
-	ts.tv_nsec = ((tv.tv_usec / 1000 + remaining) % 1000) * 1000000;
-	pthread_cond_timedwait(&dongle->cond, &dongle->mutex, &ts);
-}
-
 static int can_take_two(t_coder *coder, t_data *data)
 {
 	t_request *left_top;
 	t_request *right_top;
 
-
+	
 	if (coder->left->queue.size == 0 || coder->right->queue.size == 0)
 		return (0);
-
+	
 	left_top = pick_next(coder->left);
 	right_top = pick_next(coder->right);
-
+	
+	// printf(
+	// 	"coder %d | left_top=%d right_top=%d | left_av=%d right_av=%d\n",
+	// 	coder->id,
+	// 	left_top->coder_id,
+	// 	right_top->coder_id,
+	// 	coder->left->available,
+	// 	coder->right->available
+	// );
+	
 	if (left_top->coder_id != coder->id ||right_top->coder_id != coder->id)
 		return (0);
 
@@ -112,6 +117,7 @@ static int can_take_two(t_coder *coder, t_data *data)
 static void	acquire_dongle(t_coder *coder, t_data *data)
 {
 	t_request	req;
+	long	wait_ms;
 
 
 	req.coder_id = coder->id;
@@ -126,20 +132,9 @@ static void	acquire_dongle(t_coder *coder, t_data *data)
 	heap_push(&coder->left->queue, req, data->scheduler);
 	heap_push(&coder->right->queue, req, data->scheduler);
 
-    // while (is_running(data)
-	// 	&& !can_take_two(coder, data))
-	// {
-	// 	if (can_take_two(coder, data))
-	// 		wait_cooldown(coder->left, data);
-	// 	else
-	// 		pthread_cond_wait(&data->state_cond, &data->state_mutex);
-	// }
-
 	while (is_running(data)
 		&& !can_take_two(coder, data))
 	{
-		long	wait_ms;
-
 		wait_ms = get_cooldown_wait(coder, data);
 		if (wait_ms > 0)
 			wait_state_timeout(data, wait_ms);

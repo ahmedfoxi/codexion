@@ -1,8 +1,8 @@
-NAME = codex
+NAME = codexion
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRCS =  src/main.c \
 		src/initialization.c \

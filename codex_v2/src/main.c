@@ -6,30 +6,22 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 13:44:07 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 23:57:26 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "codex.h"
+#include "codex.h"
 
-
-void	wake_all(t_data *data)
+void    wake_all(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->number_of_coders)
-	{
-		pthread_mutex_lock(&data->dongles[i].mutex);
-		pthread_cond_broadcast(&data->dongles[i].cond);
-		pthread_mutex_unlock(&data->dongles[i].mutex);
-		i++;
-	}
+    pthread_mutex_lock(&data->state_mutex);
+    pthread_cond_broadcast(&data->state_cond);
+    pthread_mutex_unlock(&data->state_mutex);
 }
 
 void    start_simulation(t_data *data)
 {
-    int i;
+    int     i;
 
 
     data->start_time = get_time_ms();
@@ -66,6 +58,12 @@ int main(int ac, char **av)
         return 0;
     }
     data = ft_parse(av);
+    if (data->number_of_coders == 1)
+    {
+        printf("0 1 burned out\n");
+        free(data);
+        return (0);
+    }
     init_data(data);
     start_simulation(data);
     clean_up(data);

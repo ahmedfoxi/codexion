@@ -6,50 +6,29 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:07:33 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/13 18:42:59 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/14 18:08:31 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "codex.h"
 
 
-void	release_dongle(t_dongle *dongle, t_data *data)
-{
-	pthread_mutex_lock(&data->state_mutex);
-
-	dongle->available = 1;
-	dongle->last_release = get_time_ms();
-
-	pthread_cond_broadcast(&data->state_cond);
-
-	pthread_mutex_unlock(&data->state_mutex);
-}
-
 void	release_dongles(t_coder *coder, t_data *data)
 {
+	long	now;
+
+
 	pthread_mutex_lock(&data->state_mutex);
 
+	now = get_time_ms();
+
 	coder->left->available = 1;
-	coder->left->last_release = get_time_ms();
-	
+	coder->left->last_release = now;
+
 	coder->right->available = 1;
-	coder->right->last_release = get_time_ms();
+	coder->right->last_release = now;
 
 	pthread_cond_broadcast(&data->state_cond);
 
 	pthread_mutex_unlock(&data->state_mutex);
-}
-
-void	get_dongle_order(t_coder *coder, t_dongle **first, t_dongle **second)
-{
-	if (coder->left_idx <= coder->right_idx)
-	{
-		*first = coder->left;
-		*second = coder->right;
-	}
-	else
-	{
-		*first = coder->right;
-		*second = coder->left;
-	}
 }
