@@ -6,20 +6,20 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/15 00:20:26 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/15 00:46:42 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/16 00:18:07 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codex.h"
 
-static void	coder_init(t_data *data)
+static int	coder_init(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	data->coders = malloc(sizeof(t_coder) * data->number_of_coders);
 	if (!data->coders)
-		return ;
+		return (0);
 	while (i < data->number_of_coders)
 	{
 		data->coders[i].id = i + 1;
@@ -29,9 +29,10 @@ static void	coder_init(t_data *data)
 		pthread_mutex_init(&data->coders[i].coder_mutex, NULL);
 		i++;
 	}
+	return (1);
 }
 
-static void	dongle_init(t_data *data)
+static int	dongle_init(t_data *data)
 {
 	int	i;
 	int	n_coders;
@@ -40,16 +41,18 @@ static void	dongle_init(t_data *data)
 	n_coders = data->number_of_coders;
 	data->dongles = malloc(sizeof(t_dongle) * n_coders);
 	if (!data->dongles)
-		return ;
+		return (0);
 	while (i < n_coders)
 	{
 		data->dongles[i].id = i + 1;
 		data->dongles[i].available = 1;
 		data->dongles[i].last_release = 0;
-		heap_init(&data->dongles[i].queue,
-			data->number_of_compiles_required * 2);
+		if (!heap_init(&data->dongles[i].queue,
+				data->number_of_compiles_required * 2))
+			return (0);
 		i++;
 	}
+	return (1);
 }
 
 static void	link_coder_dongle(t_data *data)
@@ -67,18 +70,18 @@ static void	link_coder_dongle(t_data *data)
 	}
 }
 
-static void	ft_indexing(t_data *data)
-{
-	int	i;
+// static void	ft_indexing(t_data *data)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < data->number_of_coders)
-	{
-		data->coders[i].left_idx = data->coders[i].left->id;
-		data->coders[i].right_idx = data->coders[i].right->id;
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (i < data->number_of_coders)
+// 	{
+// 		data->coders[i].left_idx = data->coders[i].left->id;
+// 		data->coders[i].right_idx = data->coders[i].right->id;
+// 		i++;
+// 	}
+// }
 
 // static void	affiche(t_data *data)
 // {
@@ -94,15 +97,18 @@ static void	ft_indexing(t_data *data)
 // 	}
 // }
 
-void	init_data(t_data *data)
+int	init_data(t_data *data)
 {
-	dongle_init(data);
-	coder_init(data);
+	if (!dongle_init(data))
+		return (0);
+	if (!coder_init(data))
+		return (0);
 	link_coder_dongle(data);
-	ft_indexing(data);
+	// ft_indexing(data);
 	pthread_mutex_init(&data->counter_mutex, NULL);
 	pthread_mutex_init(&data->log_mutex, NULL);
 	pthread_mutex_init(&data->simulation_mutex, NULL);
 	pthread_mutex_init(&data->state_mutex, NULL);
 	pthread_cond_init(&data->state_cond, NULL);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 12:55:03 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/15 00:47:48 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/16 00:00:59 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ void	wake_all(t_data *data)
 	pthread_mutex_lock(&data->state_mutex);
 	pthread_cond_broadcast(&data->state_cond);
 	pthread_mutex_unlock(&data->state_mutex);
+}
+
+static void	one_coder_case(t_data *data)
+{
+	int	id;
+
+	id = data->coders[0].id;
+	printf("%d %d has taken a dongle\n", 0, id);
+	usleep(data->time_to_burnout * 1000);
+	printf("%lld %d burned out\n", data->time_to_burnout, id);
 }
 
 static void	start_simulation(t_data *data)
@@ -45,22 +55,26 @@ static void	start_simulation(t_data *data)
 
 int	main(int ac, char **av)
 {
-	t_data	*data;
+	t_data	data;
 
 	if (ac != 9)
 	{
 		write(2, "ERROR", 5);
 		return (0);
 	}
-	data = ft_parse(av);
-	if (data->number_of_coders == 1)
+	ft_parse(av, &data);
+	if (!init_data(&data))
 	{
-		printf("0 1 burned out\n");
-		free(data);
+		clean_up(&data);
 		return (0);
 	}
-	init_data(data);
-	start_simulation(data);
-	clean_up(data);
+	if (data.number_of_coders == 1)
+	{
+		one_coder_case(&data);
+		clean_up(&data);
+		return (0);
+	}
+	start_simulation(&data);
+	clean_up(&data);
 	return (0);
 }

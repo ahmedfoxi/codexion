@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 13:00:19 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/15 00:36:38 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/15 14:14:20 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,11 @@ static long long	ft_atoi(char *str)
 	return (result);
 }
 
-static t_data	*get_args(char **args)
+static void	get_args(char **args, t_data *data)
 {
-	t_data	*data;
 	int		i;
 	long	numbers[7];
 
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (NULL);
 	i = 1;
 	while (i < 8)
 	{
@@ -74,10 +70,9 @@ static t_data	*get_args(char **args)
 		data->scheduler = 1;
 	data->request_counter = 0;
 	data->runing = 1;
-	return (data);
 }
 
-t_data	*ft_parse(char **args)
+void	ft_parse(char **args, t_data	*data)
 {
 	int	i;
 
@@ -97,5 +92,5 @@ t_data	*ft_parse(char **args)
 		write(2, "ERROR", 5);
 		exit(1);
 	}
-	return (get_args(args));
+	get_args(args, data);
 }

@@ -2,7 +2,7 @@ NAME = codexion
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -g -pthread
 
 SRCS =  src/main.c \
 		src/initialization.c \

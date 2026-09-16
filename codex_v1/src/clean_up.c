@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/18 17:17:56 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/15 00:14:53 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/15 14:14:47 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,4 @@ void	clean_up(t_data *data)
 	destroy_mutex(data);
 	free(data->dongles);
 	free(data->coders);
-	free(data);
 }

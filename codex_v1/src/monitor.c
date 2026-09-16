@@ -6,7 +6,7 @@
 /*   By: ahbarbou <ahbarbou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 18:36:41 by ahbarbou          #+#    #+#             */
-/*   Updated: 2026/09/15 00:43:53 by ahbarbou         ###   ########.fr       */
+/*   Updated: 2026/09/16 00:33:02 by ahbarbou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	handle_bournout(t_data *data, int idx, long long now)
 	wake_all(data);
 }
 
-static void	check_all_done(t_data *data)
+void	check_all_done(t_data *data)
 {
 	int	i;
 
